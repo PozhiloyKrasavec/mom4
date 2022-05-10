@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="614.0" prefWidth="848.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mom4.DealsWindowController">
+   <children>
+      <TableView prefHeight="494.0" prefWidth="848.0" fx:id="dealTable" editable="true">
+        <columns>
+          <TableColumn prefWidth="34.399993896484375" text="ID" fx:id="idColumn" />
+          <TableColumn prefWidth="63.999969482421875" text="Клиент" fx:id="clientColumn" />
+            <TableColumn prefWidth="61.5999755859375" text="Товар" fx:id="goodColumn" />
+            <TableColumn prefWidth="55.20001220703125" text="Срок" fx:id="timeColumn" />
+            <TableColumn prefWidth="60.0" text="Доставка" fx:id="deliveryColumn" />
+            <TableColumn prefWidth="57.5999755859375" text="Сумма" fx:id="finalPriceColumn" />
+            <TableColumn prefWidth="70.4000244140625" text="Депозит" fx:id="depositeColumn" />
+            <TableColumn prefWidth="145.5999755859375" text="Дата выдачи" fx:id="giveDateColumn"/>
+            <TableColumn prefWidth="140.0" text="Дата возврата" fx:id="receiveDateColumn"/>
+            <TableColumn prefWidth="75.0" text="Документы" fx:id="docsColumn" />
+            <TableColumn prefWidth="88.0" text="Номер договора" fx:id="contractNumColumn" />
+        </columns>
+      </TableView>
+      <ChoiceBox layoutX="21.0" layoutY="509.0" prefWidth="150.0" fx:id="clientsField" />
+      <ChoiceBox layoutX="188.0" layoutY="509.0" prefWidth="150.0" fx:id="goodField" />
+      <ChoiceBox layoutX="386.0" layoutY="509.0" prefWidth="150.0" fx:id="timeField" />
+      <TextField layoutX="555.0" layoutY="509.0" promptText="Доставка" fx:id="deliveryField" />
+      <TextField layoutX="22.0" layoutY="556.0" promptText="Депозит" fx:id="depositField" />
+      <DatePicker layoutX="188.0" layoutY="556.0" prefHeight="26.0" prefWidth="150.0" promptText="Дата выдачи" fx:id="datePickerGiveDate" />
+      <TextField layoutX="387.0" layoutY="556.0" promptText="Документы" fx:id="docsField" />
+      <TextField layoutX="555.0" layoutY="556.0" promptText="Номер договора" fx:id="contractsNumField" />
+      <Button layoutX="755.0" layoutY="535.0" mnemonicParsing="false" text="Добавить" onAction="#addDeal" />
+   </children>
+</AnchorPane>

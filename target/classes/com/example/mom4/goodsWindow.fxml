@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="598.0" prefWidth="982.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mom4.GoodsWindowController">
+   <children>
+      <ScrollPane pannable="true" prefHeight="482.0" prefWidth="982.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="981.0">
+               <children>
+                  <TableView fx:id="goodsTable" editable="true" layoutX="-5.0" layoutY="-4.0" prefHeight="471.0" prefWidth="983.0">
+                    <columns>
+                      <TableColumn fx:id="idColumn" prefWidth="75.0" text="ID" />
+                      <TableColumn fx:id="brandColumn" prefWidth="75.0" text="Бренд" />
+                        <TableColumn fx:id="modelColumn" prefWidth="75.0" text="Модель" />
+                        <TableColumn fx:id="quantityColumn" prefWidth="104.0" text="Количество" />
+                        <TableColumn fx:id="sellPriceColumn" prefWidth="104.0" text="Цена продажи" />
+                        <TableColumn fx:id="_7daysPriceColumn" minWidth="8.0" prefWidth="104.0" text="Аренда(неделя)" />
+                        <TableColumn fx:id="_14daysPriceColumn" prefWidth="104.0" text="Аренда(2 недели)" />
+                        <TableColumn fx:id="monthPriceColumn" prefWidth="104.0" text="Аренда(месяц)" />
+                        <TableColumn fx:id="_2monthPriceColumn" prefWidth="104.0" text="Аренда(2 месяца)" />
+                        <TableColumn fx:id="_3monthPriceColumn" prefWidth="104.0" text="Аренда(3 месяца)" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <TextField fx:id="brandTextField" layoutX="14.0" layoutY="490.0" promptText="Бренд" />
+      <TextField fx:id="modelTextField" layoutX="191.0" layoutY="490.0" promptText="Модель" />
+      <TextField fx:id="quantityTextField" layoutX="376.0" layoutY="490.0" promptText="Количество" />
+      <TextField fx:id="sellPriceTextField" layoutX="549.0" layoutY="490.0" promptText="Цена продажи" />
+      <TextField fx:id="_7daysPriceTextField" layoutX="731.0" layoutY="490.0" promptText="Аренда(неделя)" />
+      <TextField fx:id="_14daysPriceTextField" layoutX="8.0" layoutY="541.0" promptText="Аренда(2 недели)" />
+      <TextField fx:id="monthTextField" layoutX="191.0" layoutY="541.0" promptText="Аренда(месяц)" />
+      <TextField fx:id="_2monthTextField" layoutX="376.0" layoutY="541.0" promptText="Аренда(2 месяц)" />
+      <TextField fx:id="_3monthTextField" layoutX="549.0" layoutY="541.0" promptText="Аренда(3 месяц)" />
+      <Button layoutX="899.0" layoutY="528.0" mnemonicParsing="false" onAction="#addGood" text="Добавить" />
+   </children>
+</AnchorPane>
