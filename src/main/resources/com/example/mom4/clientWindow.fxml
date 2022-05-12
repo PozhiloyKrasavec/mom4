@@ -6,20 +6,21 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mom4.ClientsWindowController">
    <children>
-      <TableView layoutY="-1.0" prefHeight="302.0" prefWidth="603.0" fx:id="clientsTable" editable="true">
+      <TableView fx:id="clientsTable" editable="true" layoutY="-1.0" prefHeight="302.0" prefWidth="603.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="id" fx:id="idColumn" />
-          <TableColumn prefWidth="209.59998321533203" text="ФИО"  fx:id="FioColumn"  />
-            <TableColumn prefWidth="111.20001220703125" text="Платформа" fx:id="platformColumn" />
-            <TableColumn prefWidth="205.59999389648442" text="Адрес" fx:id="addressColumn" />
+          <TableColumn fx:id="idColumn" prefWidth="75.0" text="id" />
+          <TableColumn fx:id="FioColumn" prefWidth="209.59998321533203" text="ФИО" />
+            <TableColumn fx:id="platformColumn" prefWidth="111.20001220703125" text="Платформа" />
+            <TableColumn fx:id="addressColumn" prefWidth="104.79998779296875" text="Адрес" />
+            <TableColumn fx:id="telephoneColumn" prefWidth="100.0" text="Телефон" />
         </columns>
       </TableView>
-      <TextField layoutX="21.0" layoutY="332.0" promptText="ФИО" fx:id="FIOtextField"/>
-      <TextField layoutX="184.0" layoutY="332.0" promptText="Платформа" fx:id="platformTextField" />
-      <TextField layoutX="351.0" layoutY="332.0" promptText="Адрес" fx:id="addressTextField" />
-      <Button layoutX="522.0" layoutY="332.0" mnemonicParsing="false" text="Добавить" onAction="#addClient" />
+      <TextField fx:id="FIOtextField" layoutX="21.0" layoutY="332.0" promptText="ФИО" />
+      <TextField fx:id="platformTextField" layoutX="184.0" layoutY="332.0" promptText="Платформа" />
+      <TextField fx:id="addressTextField" layoutX="351.0" layoutY="332.0" promptText="Адрес" />
+      <Button layoutX="522.0" layoutY="332.0" mnemonicParsing="false" onAction="#addClient" text="Добавить" />
+      <TextField fx:id="telephoneTextField" layoutX="21.0" layoutY="367.0" promptText="Телефон" />
    </children>
 </AnchorPane>

@@ -49,7 +49,8 @@ public class DatabaseHandler{
                 String FIO = resultSet.getString(2);
                 String platform = resultSet.getString(3);
                 String address = resultSet.getString(4);
-                clients.add(new Client(id,FIO, platform,address));
+                String telephone = resultSet.getString(5);
+                clients.add(new Client(id,FIO, platform,address,telephone));
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -135,14 +136,15 @@ public class DatabaseHandler{
     }
     public void writeClient(Client client){
         String insert = "INSERT INTO clients" +
-                "(idclients,FIO,platform,address)" +
-                "VALUES(?,?,?,?)";
+                "(idclients,FIO,platform,address,telephone)" +
+                "VALUES(?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(insert);
             preparedStatement.setInt(1,client.getId());
             preparedStatement.setString(2, client.getFIO());
             preparedStatement.setString(3, client.getPlatform());
             preparedStatement.setString(4, client.getAddress());
+            preparedStatement.setString(5, client.getTelephone());
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -153,14 +155,16 @@ public class DatabaseHandler{
         String update = "UPDATE clients " +
                 "SET FIO = ?," +
                 "platform = ?," +
-                "address = ?" +
+                "address = ?," +
+                "telephone = ?" +
                 " WHERE idclients = ?";
         try {
             PreparedStatement preparedStatement = getDbConnection().prepareStatement(update);
             preparedStatement.setString(1, client.getFIO());
             preparedStatement.setString(2, client.getPlatform());
             preparedStatement.setString(3, client.getAddress());
-            preparedStatement.setInt(4,client.getId());
+            preparedStatement.setString(4, client.getTelephone());
+            preparedStatement.setInt(5,client.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

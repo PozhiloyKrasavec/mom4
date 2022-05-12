@@ -14,10 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.cell.*;
 import javafx.util.Callback;
 import javafx.util.converter.DateStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -42,9 +39,9 @@ public class DealsWindowController {
     @FXML
     TableColumn<Deal,Integer> idColumn;
     @FXML
-    TableColumn<Deal,Integer> clientColumn;
+    TableColumn<Deal,String> clientColumn;
     @FXML
-    TableColumn<Deal,Integer> goodColumn;
+    TableColumn<Deal,String> goodColumn;
     @FXML
     TableColumn<Deal,Integer> timeColumn;
     @FXML
@@ -96,32 +93,47 @@ public class DealsWindowController {
         timeField.getItems().addAll(7,14,30,60,90);
         dealTable.setItems(FXCollections.observableArrayList(deals));
         idColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("id"));
-        clientColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("clientId"));
-        clientColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        clientColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, Integer>>() {
+        clientColumn.setCellValueFactory(deal ->{
+            int clientId = deal.getValue().getClientId();
+            String clientFIO = "";
+            for (Client client : clients){
+                if (client.getId()==clientId) clientFIO = client.getFIO();
+            }
+            return new SimpleStringProperty(clientId +" - " + clientFIO);
+        });
+        clientColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        clientColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<Deal, Integer> event) {
+            public void handle(TableColumn.CellEditEvent<Deal, String> event) {
                 Deal temp = (Deal) event.getTableView().getItems().get(
                         event.getTablePosition().getRow()
                 );
-                temp.setClientId(event.getNewValue());
+                temp.setClientId(Integer.parseInt(event.getNewValue().substring(0,1)));
                 databaseHandler.updateDeal(temp);
             }
         });
-        goodColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("goodId"));
-        goodColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        goodColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, Integer>>() {
+        goodColumn.setCellValueFactory(deal ->{
+            int goodId = deal.getValue().getGoodId();
+            String goodName = "";
+            for (Good good : goods){
+                if (good.getId() == goodId) goodName = good.getBrand() + " " + good.getModel();
+            }
+            return new SimpleStringProperty(goodId + " - " + goodName);
+        });
+        goodColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        goodColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, String>>() {
             @Override
-            public void handle(TableColumn.CellEditEvent<Deal, Integer> event) {
+            public void handle(TableColumn.CellEditEvent<Deal, String> event) {
                 Deal temp = (Deal) event.getTableView().getItems().get(
                         event.getTablePosition().getRow()
                 );
-                temp.setGoodId(event.getNewValue());
+                temp.setGoodId(Integer.parseInt(event.getNewValue().substring(0,1)));
                 databaseHandler.updateDeal(temp);
             }
         });
         timeColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("time"));
-        timeColumn.setCellFactory(ChoiceBoxTableCell.forTableColumn(FXCollections.observableArrayList(7,14,30,60,90)));
+        timeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(7,14,30,60,90)));
+        timeColumn.setEditable(true);
         timeColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, Integer>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Deal, Integer> event) {
@@ -129,6 +141,10 @@ public class DealsWindowController {
                         event.getTablePosition().getRow()
                 );
                 temp.setTime(event.getNewValue());
+                deals.forEach(deal -> {
+                    if (deal.getId()==temp.getId()) deal.setFinalPrice(setFinalPriceFun(temp.getTime(),temp.getId()));
+                });
+                dealTable.setItems(FXCollections.observableArrayList(deals));
                 databaseHandler.updateDeal(temp);
             }
         });
@@ -144,16 +160,46 @@ public class DealsWindowController {
                 databaseHandler.updateDeal(temp);
             }
         });
-        finalPriceColumn.setCellValueFactory(param -> {
+        finalPriceColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("finalPrice")/*param -> {
             int goodId = param.getValue().getGoodId();
             int currentTime = param.getValue().getTime();
             Good good = goods.get(goodId-1);
-            if (currentTime == 7) return new SimpleIntegerProperty(good.get_7daysPrice()).asObject();
-            else if (currentTime == 14) return new SimpleIntegerProperty(good.get_14daysPrice()).asObject();
-            else if (currentTime == 30) return new SimpleIntegerProperty(good.getMonthPrice()).asObject();
-            else if (currentTime == 60) return new SimpleIntegerProperty(good.get_2monthPrice()).asObject();
-            else if (currentTime == 90) return new SimpleIntegerProperty(good.get_3monthPrice()).asObject();
+            if (currentTime == 7){
+                param.getValue().setFinalPrice(good.get_7daysPrice());
+                databaseHandler.updateDeal(param.getValue());
+                return new SimpleIntegerProperty(good.get_7daysPrice()).asObject();
+            }
+            else if (currentTime == 14){
+                param.getValue().setFinalPrice(good.get_14daysPrice());
+                databaseHandler.updateDeal(param.getValue());
+                return new SimpleIntegerProperty(good.get_14daysPrice()).asObject();
+            }
+            else if (currentTime == 30){
+                param.getValue().setFinalPrice(good.getMonthPrice());
+                databaseHandler.updateDeal(param.getValue());
+                return new SimpleIntegerProperty(good.getMonthPrice()).asObject();
+            }
+            else if (currentTime == 60){
+                param.getValue().setFinalPrice(good.get_2monthPrice());
+                databaseHandler.updateDeal(param.getValue());
+                return new SimpleIntegerProperty(good.get_2monthPrice()).asObject();
+            }
+            else if (currentTime == 90){
+                param.getValue().setFinalPrice(good.get_3monthPrice());
+                databaseHandler.updateDeal(param.getValue());
+                return new SimpleIntegerProperty(good.get_3monthPrice()).asObject();
+            }
             return null;
+        }*/);
+        finalPriceColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        finalPriceColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, Integer>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Deal, Integer> event) {
+                Deal temp = (Deal) event.getTableView().getItems().get(
+                        event.getTablePosition().getRow());
+                temp.setFinalPrice(event.getNewValue());
+                databaseHandler.updateDeal(temp);
+            }
         });
         depositeColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("deposit"));
         depositeColumn.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -185,6 +231,8 @@ public class DealsWindowController {
             LocalDate tempDate = Instant.ofEpochMilli(
                     temp.getGiveDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate().plusDays(temp.getTime());
             String date = dateFormat.format(Date.from(tempDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+            param.getValue().setReceiveDate(Date.from(tempDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
+            databaseHandler.updateDeal(param.getValue());
             return new SimpleStringProperty(date);
         });
         docsColumn.setCellValueFactory(new PropertyValueFactory<Deal,Boolean>("docs"));
@@ -245,5 +293,18 @@ public class DealsWindowController {
         deals.add(temp);
         dealTable.setItems(FXCollections.observableArrayList(deals));
         databaseHandler.writeDeal(temp);
+    }
+    private int setFinalPriceFun(int time, int id){
+        int finalPrice = 0;
+        for (Good good : goods){
+            if (id == good.getId()){
+                if (time == 7) finalPrice += good.get_7daysPrice();
+                else if(time == 14) finalPrice += good.get_14daysPrice();
+                else if(time == 30) finalPrice += good.getMonthPrice();
+                else if(time == 60) finalPrice +=good.get_2monthPrice();
+                else if(time == 90) finalPrice +=good.get_3monthPrice();
+            }
+        }
+        return finalPrice;
     }
 }

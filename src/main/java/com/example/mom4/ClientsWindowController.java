@@ -25,6 +25,8 @@ public class ClientsWindowController {
     @FXML
     TextField addressTextField;
     @FXML
+    TextField telephoneTextField;
+    @FXML
     TableView<Client> clientsTable = new TableView<Client>();
     @FXML
     TableColumn<Client,Integer> idColumn;
@@ -34,6 +36,8 @@ public class ClientsWindowController {
     TableColumn<Client,String> platformColumn;
     @FXML
     TableColumn<Client,String> addressColumn;
+    @FXML
+    TableColumn<Client,String> telephoneColumn;
 
     public void init(ArrayList<Client> clients){
         this.clients = clients;
@@ -75,13 +79,26 @@ public class ClientsWindowController {
                 databaseHandler.updateClient(temp);
             }
         });
+        telephoneColumn.setCellValueFactory(new PropertyValueFactory<Client,String>("telephone"));
+        telephoneColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        telephoneColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Client, String>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Client, String> event) {
+                Client temp = (Client) event.getTableView().getItems().get(
+                        event.getTablePosition().getRow()
+                );
+                temp.setTelephone(event.getNewValue());
+                databaseHandler.updateClient(temp);
+            }
+        });
     }
     public void addClient(ActionEvent event){
         String FIO = FIOtextField.getText();
         String platform = platformTextField.getText();
         String address = addressTextField.getText();
+        String telephone = telephoneTextField.getText();
         int id = clients.size()+1;
-        Client client = new Client(id,FIO,platform,address);
+        Client client = new Client(id,FIO,platform,address,telephone);
         clients.add(client);
         clientsTable.setItems(FXCollections.observableArrayList(clients));
         try {

@@ -5,12 +5,22 @@ public class Client {
     String FIO;
     String platform;
     String address;
+    String telephone;
 
-    public Client(int id, String FIO, String platform, String address) {
+    public Client(int id, String FIO, String platform, String address, String telephone) {
         this.id = id;
         this.FIO = FIO;
         this.platform = platform;
         this.address = address;
+        this.telephone = telephone;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public int getId() {
