@@ -4,10 +4,7 @@ import com.example.mom4.Model.Client;
 import com.example.mom4.Model.DatabaseHandler;
 import com.example.mom4.Model.Deal;
 import com.example.mom4.Model.Good;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -133,7 +130,6 @@ public class DealsWindowController {
         });
         timeColumn.setCellValueFactory(new PropertyValueFactory<Deal,Integer>("time"));
         timeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableArrayList(7,14,30,60,90)));
-        timeColumn.setEditable(true);
         timeColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Deal, Integer>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<Deal, Integer> event) {

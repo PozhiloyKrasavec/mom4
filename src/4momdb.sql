@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8mb3 ;
 USE `mydb` ;
 
 -- -----------------------------------------------------
@@ -22,14 +22,16 @@ CREATE TABLE IF NOT EXISTS `mydb`.`clients` (
   `FIO` VARCHAR(45) NOT NULL,
   `platform` VARCHAR(45) NOT NULL,
   `address` VARCHAR(45) NOT NULL,
+  `telephone` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idclients`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Goods`
+-- Table `mydb`.`goods`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Goods` (
+CREATE TABLE IF NOT EXISTS `mydb`.`goods` (
   `idGoods` INT NOT NULL,
   `Brand` VARCHAR(45) NOT NULL,
   `Model` VARCHAR(45) NOT NULL,
@@ -41,13 +43,14 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Goods` (
   `2monthPrice` INT NOT NULL,
   `3monthPrice` INT NOT NULL,
   PRIMARY KEY (`idGoods`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Deals`
+-- Table `mydb`.`deals`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`Deals` (
+CREATE TABLE IF NOT EXISTS `mydb`.`deals` (
   `idDeals` INT NOT NULL,
   `clients_idclients` INT NOT NULL,
   `Goods_idGoods` INT NOT NULL,
@@ -59,20 +62,17 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Deals` (
   `ReceiveDate` DATE NOT NULL,
   `Docs` TINYINT NOT NULL,
   `ContractNum` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idDeals`, `clients_idclients`, `Goods_idGoods`),
+  PRIMARY KEY (`idDeals`),
   INDEX `fk_Deals_clients_idx` (`clients_idclients` ASC) VISIBLE,
   INDEX `fk_Deals_Goods1_idx` (`Goods_idGoods` ASC) VISIBLE,
   CONSTRAINT `fk_Deals_clients`
     FOREIGN KEY (`clients_idclients`)
-    REFERENCES `mydb`.`clients` (`idclients`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `mydb`.`clients` (`idclients`),
   CONSTRAINT `fk_Deals_Goods1`
     FOREIGN KEY (`Goods_idGoods`)
-    REFERENCES `mydb`.`Goods` (`idGoods`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `mydb`.`goods` (`idGoods`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb3;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
